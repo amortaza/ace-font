@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <string>
 
 #include "ace-font.h"
 
@@ -31,7 +32,6 @@ FT_Bitmap* AceType::draw(char c, int height) {
 	return &face->glyph->bitmap;
 }
 
-
 CharAtlas::CharAtlas(FT_Bitmap *bitmap) {
 	width = bitmap->width;
 	height = bitmap->rows;
@@ -46,7 +46,6 @@ CharAtlas::CharAtlas(FT_Bitmap *bitmap) {
 CharAtlas::~CharAtlas() {
 	delete[] buffer;
 }
-
 
 int Atlas::getKerning(char a, char b) {
 	int i1 = charGlyphIndex[a];
@@ -88,7 +87,6 @@ Atlas::~Atlas() {
 
 	delete ace;
 }
-
 
 void Atlas::load(int height) {
 	for (int i = 0; i<charCount; i++) {
@@ -177,7 +175,11 @@ void Atlas::saveImage(char* szPathName, void* lpBits, int w, int h) {
 }
 
 // for when rendering to buffer
-void CoreDraw::core(char* str, int x, int y, Atlas* atlas, int* coords) {
+void CoreDraw::core(char* istr, int x, int y, Atlas* atlas, int* coords) {
+	string s2(istr);
+	s2.append(".");
+	const char* str = s2.c_str();
+
 	int len = strlen(str);
 
 	int index = 0;
@@ -205,28 +207,21 @@ void CoreDraw::core(char* str, int x, int y, Atlas* atlas, int* coords) {
 			penX += atlas->getKerning(c, str[i + 1]) + atlas->charAdvance[c];
 		}
 	}
-
-	// add the "."
-	char c = '.';
-
-	penY = y - atlas->charBitmapTop[c];
-
-	int nudgeX = atlas->charBitmapLeft[c];
-
-	int a = penX + nudgeX, b = penY;
-	coords[index++] = a;
-	coords[index++] = b;
 }
 
 // for when rendering to texture
-void CoreDraw::core2(char* str, int x, int y, Atlas* atlas, int* coords, char phantomChar) {
+void CoreDraw::core2(char* istr, int x, int y, Atlas* atlas, int* coords, char phantomChar) {
+	string s2(istr);
+	s2.append(".");
+	const char* str = s2.c_str();
+
 	int len = strlen(str);
 
 	int index = 0;
 
 	int penX = x, penY;
 
-	if (len>0 && phantomChar != '\0') {
+	if (len > 0 && phantomChar != '\0') {
 		penX += atlas->getKerning(phantomChar, str[0]) + atlas->charAdvance[phantomChar];
 	}
 
@@ -245,6 +240,7 @@ void CoreDraw::core2(char* str, int x, int y, Atlas* atlas, int* coords, char ph
 			int nudgeX = atlas->charBitmapLeft[c];
 
 			int a = penX + nudgeX, b = penY;
+			//rintf("penX %i = %i\n", index, a);
 			coords[index++] = a;
 			coords[index++] = b;
 		}
@@ -254,18 +250,7 @@ void CoreDraw::core2(char* str, int x, int y, Atlas* atlas, int* coords, char ph
 		}
 	}
 
-	// now add the "."
-	char c = '.';
-
-	// if ortho is ever flipped vertically where 0,0 is at bottom-left, then use this formula
-	//penY = y + atlas->charBitmapTop[c] - atlas->atlasHeight;
-	penY = y - atlas->charBitmapTop[c];
-
-	int nudgeX = atlas->charBitmapLeft[c];
-
-	int a = penX + nudgeX, b = penY;
-	coords[index++] = a;
-	coords[index++] = b;
+	//rintf("index %i\n",index);
 }
 
 

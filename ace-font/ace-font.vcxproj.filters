@@ -5,6 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="ace-font">
+      <UniqueIdentifier>{3355bab8-c24f-4fc2-8b26-d984ddfbbe09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -13,14 +16,16 @@
     <ClInclude Include="stdafx.h">
       <Filter>standard</Filter>
     </ClInclude>
-    <ClInclude Include="ace-font.h" />
+    <ClInclude Include="ace-font\ace-font.h">
+      <Filter>ace-font</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>standard</Filter>
     </ClCompile>
-    <ClCompile Include="ace-font.cpp">
-      <Filter>standard</Filter>
+    <ClCompile Include="ace-font\ace-font.cpp">
+      <Filter>ace-font</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
