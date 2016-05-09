@@ -86,6 +86,8 @@ Atlas::~Atlas() {
 	}
 
 	delete ace;
+
+	//test new AceType();
 }
 
 void Atlas::load(int height) {
